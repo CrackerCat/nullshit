@@ -23,7 +23,7 @@ namespace utils
         return info;
     }
 
-    auto get_kernel_module( const char *name, uintptr_t* image_base, size_t* image_size ) -> bool
+    auto get_kernel_module( const char *name ) -> IMAGE
     {
         const auto to_lower = []( char *string ) -> const char *
         {
@@ -39,7 +39,7 @@ namespace utils
 
         if ( !info )
         {
-            return false;
+            return { 0, 0 };
         }
 
         for ( auto i = 0ull; i < info->number_of_modules; ++i )
@@ -48,17 +48,14 @@ namespace utils
 
             if ( strcmp( to_lower( ( char * )module.full_path_name + module.offset_to_file_name ), name ) == 0 )
             {
-                *image_base = reinterpret_cast< uintptr_t > ( module.image_base );
-                *image_size = static_cast< size_t > ( module.image_size );
-
                 ExFreePool( info );
 
-                return true;
+                return { reinterpret_cast< uintptr_t > ( module.image_base ), static_cast< size_t > ( module.image_size ) };
             }
         }
 
         ExFreePool( info );
 
-        return false;
+        return { 0, 0 };
     }
 }
