@@ -27,12 +27,12 @@ auto driver_entry( ) -> NTSTATUS
     auto callback = []( const char *name, uintptr_t function_address, uintptr_t image_base, size_t image_size ) -> void
     {
         if (
-            ( *reinterpret_cast< unsigned char * >( function_address + 0 ) == 0x48 && // mov
+            *reinterpret_cast< unsigned char * >( function_address + 0 ) == 0x48 && // mov
                 *reinterpret_cast< unsigned char * >( function_address + 1 ) == 0xB8 && // rax
                 *reinterpret_cast< unsigned char * >( function_address + 10 ) == 0xFF && // jmp
-                *reinterpret_cast< unsigned char * >( function_address + 11 ) == 0xE0 ) && // rax
-            *reinterpret_cast< uintptr_t * > ( function_address + 2 ) < image_base || // handler is less then driver start address
-            *reinterpret_cast< uintptr_t * > ( function_address + 2 ) > image_base + image_size // handler is bigger then driver start address
+                *reinterpret_cast< unsigned char * >( function_address + 11 ) == 0xE0 && // rax
+            ( *reinterpret_cast< uintptr_t * > ( function_address + 2 ) < image_base || // handler is less then driver start address
+            *reinterpret_cast< uintptr_t * > ( function_address + 2 ) > image_base + image_size ) // handler is bigger then driver start address
             )
         {
             dbg( "%s nigga whatchu thinking", name );
