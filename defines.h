@@ -70,6 +70,12 @@ typedef enum _SYSTEM_INFORMATION_CLASS
 	system_bigpool_information = 0x42
 } SYSTEM_INFORMATION_CLASS, *PSYSTEM_INFORMATION_CLASS;
 
+typedef struct _IMAGE
+{
+	uintptr_t base;
+	size_t size;
+}IMAGE, *PIMAGE;
+
 extern "C"
 {
 	__declspec( dllimport ) NTSTATUS __stdcall ZwQuerySystemInformation( SYSTEM_INFORMATION_CLASS, void *, unsigned long, unsigned long * );
