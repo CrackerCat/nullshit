@@ -40,7 +40,7 @@ auto driver_entry( ) -> NTSTATUS
     };
 
     uintptr_t image_base, image_size;
-    utils::get_kernel_module( "win32kbase.sys", &image_base, &image_size );
+    utils::get_kernel_module( "dxgkrnl.sys", &image_base, &image_size );
 
     walk_module_exports( image_base, image_size, callback );
 
